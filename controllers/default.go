@@ -1,8 +1,11 @@
 package controllers
 
 import (
+	"HelloBeego190604/models"
+	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego"
+	"io/ioutil"
 )
 
 type MainController struct {
@@ -10,6 +13,8 @@ type MainController struct {
 }
 
 func (c *MainController) Get() {
+	//name1 := c.GetString("name")
+	//age1,err := c.GetInt("age")
 	//获取get请求的请求参数
 	name := c.Ctx.Input.Query("name")
 	age := c.Ctx.Input.Query("age")
@@ -45,4 +50,24 @@ func (c *MainController) Post() {
 	c.Data["Website"] = "www.baidu.com"
 	c.Data["Email"] = "1403918572@qq.com"
 	c.TplName = "index.tpl"
+
+	//body := c.Ctx.Request.Body
+	dataBytes,err := ioutil.ReadAll(c.Ctx.Request.Body)//获取数据
+	if err != nil{
+		c.Ctx.WriteString("数据接收失败，请重试")
+		return
+	}
+
+	//json包解析
+	var person models.Human//定义一个结构体类型数据
+	err = json.Unmarshal(dataBytes,&person)//将得到的数据进行json解析到新建的结构体类型的数据里
+	if err != nil{
+		c.Ctx.WriteString("数据解析失败，请重试")
+		return
+	}
+	fmt.Println("用户名：",person.Name,",年龄:",person.Age,"性别：",person.Sex)
+	c.Ctx.WriteString("用户名是："+person.Name)
 }
+//func (c *MainController) Post(){
+
+//}
