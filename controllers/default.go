@@ -11,6 +11,9 @@ import (
 type MainController struct {
 	beego.Controller//匿名字段
 }
+type Register struct {
+	beego.Controller
+}
 
 func (c *MainController) Get() {
 	//name1 := c.GetString("name")
@@ -32,6 +35,7 @@ func (c *MainController) Get() {
 }
 //该post方法是处理post类型的请求时要调用的方法
 func (c *MainController) Post() {
+/*
 	fmt.Println("post类型的请求...")
 	user := c.Ctx.Request.FormValue("user")
 	fmt.Println("用户名为：",user)
@@ -44,12 +48,9 @@ func (c *MainController) Post() {
 		c.Ctx.ResponseWriter.Write([]byte("对不起，数据不正确"))
 		return
 	}
-
+*/
 	c.Ctx.ResponseWriter.Write([]byte("恭喜你，数据正确"))
 	//request请求 response响应
-	c.Data["Website"] = "www.baidu.com"
-	c.Data["Email"] = "1403918572@qq.com"
-	c.TplName = "index.tpl"
 
 	//body := c.Ctx.Request.Body
 	dataBytes,err := ioutil.ReadAll(c.Ctx.Request.Body)//获取数据
@@ -62,12 +63,31 @@ func (c *MainController) Post() {
 	var person models.Human//定义一个结构体类型数据
 	err = json.Unmarshal(dataBytes,&person)//将得到的数据进行json解析到新建的结构体类型的数据里
 	if err != nil{
-		c.Ctx.WriteString("数据解析失败，请重试")
+		c.Ctx.WriteString("数据解析失败，请重试1")
 		return
 	}
 	fmt.Println("用户名：",person.Name,",年龄:",person.Age,"性别：",person.Sex)
 	c.Ctx.WriteString("用户名是："+person.Name)
 }
-//func (c *MainController) Post(){
-
+func  (c *Register) Post(){
+	dataBytes,err := ioutil.ReadAll(c.Ctx.Request.Body)
+	if err != nil{
+		c.Ctx.WriteString("数据接收失败，请重试")
+		return
+	}
+	//json解析
+	var person models.Person
+	err = json.Unmarshal(dataBytes,&person)
+	if err != nil{
+		c.Ctx.WriteString("数据解析失败，请重试2")
+		return
+	}
+	fmt.Println("用户名：",person.Name,"，地址：",person.Address,",生日：",person.Birthday,"，昵称：",person.Nick)
+	c.Ctx.WriteString("用户名是："+person.Name)
+}
+//{
+//    "name":"wangergou"
+//	"birthday":"2020.0101"
+//	"address":"........"
+//	"nick":"ergou"
 //}

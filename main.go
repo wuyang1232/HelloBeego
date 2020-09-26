@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/astaxie/beego"
+	_"大一下学期/github.com/go-sql-driver/mysql"
 )
 
 func main() {
@@ -20,15 +21,16 @@ func main() {
 	fmt.Println("应用监听端口：",port)
 
 	driver := config.String("db_driver")
-	dbUser := config.String("db_user")
-	dbPsaaword := config.String("db_password")
+	dbUser := config.String("db_root")
+	dbPassword := config.String("db_password")
 	dbIp := config.String("db_ip")
 	dbName := config.String("db_name")
-	db,err := sql.Open(driver,dbUser+":"+dbPsaaword+"@tcp("+dbIp+")/"+dbName+"?charset=utf8")
+	db,err := sql.Open(driver,dbUser+":"+dbPassword+"@tcp("+dbIp+")/"+dbName+"?charset=utf8")
 	//sql.Open("mysql","root:281511@tcp(127.0.0.1:3306)/hero_lol?charset=utf8")
 	if err != nil{
-		fmt.Println("数据库连接失败")
+		panic("数据库连接失败")
 	}
-	beego.Run()
+	fmt.Println(db)
+beego.Run()
 }
 
