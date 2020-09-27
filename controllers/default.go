@@ -69,6 +69,7 @@ func (c *MainController) Post() {
 	fmt.Println("用户名：",person.Name,",年龄:",person.Age,"性别：",person.Sex)
 	c.Ctx.WriteString("用户名是："+person.Name)
 }
+/*
 func  (c *Register) Post(){
 	dataBytes,err := ioutil.ReadAll(c.Ctx.Request.Body)
 	if err != nil{
@@ -85,6 +86,9 @@ func  (c *Register) Post(){
 	fmt.Println("用户名：",person.Name,"，地址：",person.Address,",生日：",person.Birthday,"，昵称：",person.Nick)
 	c.Ctx.WriteString("用户名是："+person.Name)
 }
+
+ */
+
 //{
 //    "name":"wangergou"
 //	"birthday":"2020.0101"
