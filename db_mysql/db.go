@@ -52,7 +52,7 @@ func AddUser(u models.User) (int64, error) {
 	result, err := Db.Exec("insert into user(name,birthday,address,password)" +
 		"values (?,?,?,?) ", u.Name, u.Birthday, u.Address, u.Password)
 		if err != nil {
-		fmt.Println("第一个")
+		fmt.Println(err.Error())
 		return -1, err
 	}
 	row, err := result.RowsAffected()
