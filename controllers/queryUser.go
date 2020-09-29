@@ -1,15 +1,20 @@
-package db_mysql
+package controllers
 
 import (
+	"HelloBeego190604/db_mysql"
 	"HelloBeego190604/models"
-	"crypto/md5"
+	"beego"
 	"database/sql"
-	"encoding/hex"
+	"encoding/json"
+	"io/ioutil"
 	"fmt"
-	"github.com/astaxie/beego"
-	_ "大一下学期/github.com/go-sql-driver/mysql"
+	""
+	"大一下学期/2020.06.16LoLHeros/mysql_db"
 )
 
+type QueryUser struct {
+	beego.Controller
+}
 var Db *sql.DB
 
 func Connect(){
@@ -41,24 +46,33 @@ func Connect(){
 	fmt.Println(db)
 	fmt.Println("数据库连接成功")
 }
-
-//将用户信息保存到数据库中到函数
-func AddUser(u models.User) (int64, error) {
-	//1、将密码进行hash计算，得到密码hash值
-	md5Hash := md5.New()
-	md5Hash.Write([]byte(u.Password))
-	passwordBytes := md5Hash.Sum(nil)
-	u.Password = hex.EncodeToString(passwordBytes)
-	result, err := Db.Exec("insert into user(name,birthday,address,password)" +
-		"values (?,?,?,?) ", u.Name, u.Birthday, u.Address, u.Password)
-		if err != nil {
+func (r *QueryUser) Post(){
+	DataBytes,err := ioutil.ReadAll(r.Ctx.Request.Body)
+	if err != nil{
+		r.Ctx.WriteString("数据接收错误，请重试")
+		return
+	}
+	var user models.User
+	err = json.Unmarshal(DataBytes,&user)
+	if err != nil{
+		//r.Ctx.WriteString("数据解析错误，请重试")
+		result := models.Result{
+			Code:    0,
+			Message: "数据解析错误，请重试",
+			Data:    nil,
+		}
+		r.Data["json"] = &result
+		r.ServeJSON()
+		return
+	}
+	name := user.Name
+	admin_num,err := db_mysql.QueryUse(name)
+	if err != nil{
+		fmt.Println("123")
 		fmt.Println(err.Error())
-		return -1, err
+		return
 	}
-	row, err := result.RowsAffected()
-	if err != nil {
-		fmt.Println("第二个")
-		return -1, err
+	if admin_num > 0{
+
 	}
-	return row, nil
 }
