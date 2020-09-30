@@ -6,10 +6,8 @@ import (
 	"beego"
 	"database/sql"
 	"encoding/json"
-	"io/ioutil"
 	"fmt"
-	""
-	"大一下学期/2020.06.16LoLHeros/mysql_db"
+	"io/ioutil"
 )
 
 type QueryUser struct {
@@ -52,7 +50,7 @@ func (r *QueryUser) Post(){
 		r.Ctx.WriteString("数据接收错误，请重试")
 		return
 	}
-	var user models.User
+	var user models.Quser
 	err = json.Unmarshal(DataBytes,&user)
 	if err != nil{
 		//r.Ctx.WriteString("数据解析错误，请重试")
@@ -68,11 +66,30 @@ func (r *QueryUser) Post(){
 	name := user.Name
 	admin_num,err := db_mysql.QueryUse(name)
 	if err != nil{
-		fmt.Println("123")
+		//fmt.Println("123")
 		fmt.Println(err.Error())
 		return
 	}
 	if admin_num > 0{
-
+		//md5Hash := md5.New()
+		//md5Hash.Write([]byte(user.Password))
+		//user.Password = hex.EncodeToString(md5Hash.Sum(nil))
+		result := models.Result{
+			Code:1,
+			Message:"恭喜，用户注册成功",
+			Data:user,
+		}
+		//json.Marshal(result)编码
+		r.Data["json"] = &result//将result编码为json格式返回前端
+		r.ServeJSON()
+	}else {
+		result := models.Result{
+			Code:    0,
+			Message: "用户名查找失败，请重试",
+			Data:    nil,
+		}
+		r.Data["json"] = &result
+		r.ServeJSON()
+		return
 	}
 }
