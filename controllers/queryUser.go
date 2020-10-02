@@ -88,7 +88,7 @@ func (r *QueryUser) Post(){
 			Message: "用户名查找失败，请重试",
 			Data:    nil,
 		}
-		r.Data["json"] = &result
+		r.Data["json"] = &result//
 		r.ServeJSON()
 		return
 	}
