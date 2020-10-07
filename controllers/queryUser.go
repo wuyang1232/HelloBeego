@@ -71,9 +71,6 @@ func (r *QueryUser) Post(){
 		return
 	}
 	if admin_num > 0{
-		//md5Hash := md5.New()
-		//md5Hash.Write([]byte(user.Password))
-		//user.Password = hex.EncodeToString(md5Hash.Sum(nil))
 		result := models.Result{
 			Code:1,
 			Message:"恭喜，用户注册成功",
@@ -89,7 +86,7 @@ func (r *QueryUser) Post(){
 			Data:    nil,
 		}
 		r.Data["json"] = &result//
-		r.ServeJSON()
+		r.ServeJSON()//
 		return
 	}
 }
