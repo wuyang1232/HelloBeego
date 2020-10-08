@@ -26,6 +26,7 @@ func (r *RegisterController) Post(){
 	err = json.Unmarshal(DataBytes,&user)
 	if err != nil{
 		//r.Ctx.WriteString("数据解析错误，请重试")
+		fmt.Println(err.Error())
 		result := models.Result{
 			Code:    0,
 			Message: "数据解析错误，请重试",

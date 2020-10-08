@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	_"大一下学期/github.com/go-sql-driver/mysql"
 )
 
 type QueryUser struct {
@@ -44,6 +45,7 @@ func Connect(){
 	fmt.Println(db)
 	fmt.Println("数据库连接成功")
 }
+
 func (r *QueryUser) Post(){
 	DataBytes,err := ioutil.ReadAll(r.Ctx.Request.Body)
 	if err != nil{
@@ -70,11 +72,15 @@ func (r *QueryUser) Post(){
 		fmt.Println(err.Error())
 		return
 	}
+	news,err := db_mysql.QueryAllHero(name)
+	if err != nil{
+		fmt.Println(err.Error())
+	}
 	if admin_num > 0{
 		result := models.Result{
 			Code:1,
-			Message:"恭喜，用户注册成功",
-			Data:user,
+			Message:"恭喜，用户查询成功",
+			Data:news,
 		}
 		//json.Marshal(result)编码
 		r.Data["json"] = &result//将result编码为json格式返回前端
