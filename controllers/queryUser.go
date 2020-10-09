@@ -72,10 +72,12 @@ func (r *QueryUser) Post(){
 		fmt.Println(err.Error())
 		return
 	}
+	//fmt.Println(name)
 	news,err := db_mysql.QueryAllHero(name)
 	if err != nil{
 		fmt.Println(err.Error())
 	}
+	fmt.Println(news)
 	if admin_num > 0{
 		result := models.Result{
 			Code:1,

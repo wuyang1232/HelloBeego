@@ -14,14 +14,14 @@ func QueryUse(name string)(int, error) {
 	return admin_num, nil
 }
 func QueryAllHero(nam string)([]models.User,error){
-	rows,err := Db.Query("select * from user where name = '?'",nam)
+	rows,err := Db.Query("select * from user where name = ?",nam)
 	if err != nil{
 		return nil,err
 	}
 	users := make([]models.User,0)
 	for rows.Next(){
 		var user models.User
-		err = rows.Scan(&user.Name,&user.Password,&user.Address,&user.Birthday)
+		err = rows.Scan(&user.Name,&user.Birthday,&user.Address,&user.Password)
 		if err != nil{
 			return nil,err
 		}
