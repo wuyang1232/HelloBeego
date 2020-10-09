@@ -13,6 +13,7 @@ func QueryUse(name string)(int, error) {
 	}
 	return admin_num, nil
 }
+
 func QueryAllHero(nam string)([]models.User,error){
 	rows,err := Db.Query("select * from user where name = ?",nam)
 	if err != nil{
